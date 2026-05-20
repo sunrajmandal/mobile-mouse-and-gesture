@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="NeoPointer — Bluetooth Remote Touchpad & Command Console">
+    <title>NeoPointer — Control Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- STATUS BAR -->
+    <header id="status-bar">
+        <div class="brand">
+            <span class="brand-accent">Neo</span>Pointer
+        </div>
+        <div class="dashboard">
+            <div class="dash-item">
+                <div class="status-dot" id="ws-dot"></div>
+                <span class="dash-label">WS</span>
+            </div>
+            <div class="dash-item">
+                <div class="status-dot" id="bt-dot"></div>
+                <span class="dash-label">BT</span>
+            </div>
+            <div class="dash-item">
+                <span class="dash-label latency" id="latency-display">0ms</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- APP LAYERS -->
+    <main id="app-layers">
+        <!-- MOUSE / TOUCHPAD LAYER -->
+        <section class="app-layer active" id="layer-mouse">
+            <div id="touchpad">
+                <div class="touchpad-grid"></div>
+                <div class="touch-indicator" id="touch-indicator"></div>
+                <div class="touchpad-label">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                    <span>TOUCHPAD</span>
+                </div>
+                <div class="precision-badge" id="precision-badge">PRECISION</div>
+            </div>
+            <div id="controls">
+                <div class="btn-row">
+                    <button class="ctrl-btn" id="btn-left-click">
+                        <span>Left Click</span>
+                    </button>
+                    <button class="ctrl-btn" id="btn-right-click">
+                        <span>Right Click</span>
+                    </button>
+                    <button class="ctrl-btn" id="btn-drag">
+                        <span>Drag</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONSOLE LAYER -->
+        <section class="app-layer" id="layer-console">
+            <div class="console-container">
+                <div class="console-header">
+                    <div class="term-dots"><span></span><span></span><span></span></div>
+                    <span class="term-title">NeoPointer_Console.exe</span>
+                    <button class="console-clear-btn" id="btn-console-clear">CLEAR</button>
+                </div>
+                <div class="console-output" id="console-output">
+                    <div class="console-line system">NeoPointer Console v2.0 Ready</div>
+                    <div class="console-line system">Type a command below...</div>
+                </div>
+                <div class="console-input-row">
+                    <span class="console-prompt">&gt;</span>
+                    <input type="text" id="console-input" placeholder="Enter command..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                    <button class="console-exec-btn" id="btn-console-exec">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- QUICK COMMANDS -->
+            <div class="quick-cmds">
+                <button class="qcmd" data-cmd="copy">Copy</button>
+                <button class="qcmd" data-cmd="paste">Paste</button>
+                <button class="qcmd" data-cmd="undo">Undo</button>
+                <button class="qcmd" data-cmd="close">Close</button>
+                <button class="qcmd" data-cmd="save">Save</button>
+                <button class="qcmd" data-cmd="select all">Select All</button>
+                <button class="qcmd" data-cmd="show desktop">Desktop</button>
+                <button class="qcmd" data-cmd="alt tab">Switch</button>
+                <button class="qcmd" data-cmd="screenshot">Screenshot</button>
+                <button class="qcmd" data-cmd="lock">Lock PC</button>
+                <button class="qcmd" data-cmd="open chrome">Chrome</button>
+                <button class="qcmd" data-cmd="open notepad">Notepad</button>
+            </div>
+
+            <!-- D-PAD & UTILITY -->
+            <div class="system-section">
+                <div class="arrow-pad">
+                    <button class="arrow-btn" data-key="up">▲</button>
+                    <div class="arrow-mid">
+                        <button class="arrow-btn" data-key="left">◀</button>
+                        <button class="arrow-btn center-btn" data-key="enter">⏎</button>
+                        <button class="arrow-btn" data-key="right">▶</button>
+                    </div>
+                    <button class="arrow-btn" data-key="down">▼</button>
+                </div>
+                <div class="utility-keys">
+                    <button class="ctrl-btn small" data-key="escape">ESC</button>
+                    <button class="ctrl-btn small" data-key="tab">TAB</button>
+                    <button class="ctrl-btn small" data-key="backspace">⌫</button>
+                    <button class="ctrl-btn small" data-key="delete">DEL</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SETTINGS LAYER -->
+        <section class="app-layer" id="layer-settings">
+            <div class="settings-scroll">
+                <h2 class="settings-title">Control Settings</h2>
+
+                <div class="setting-group">
+                    <label for="cursor-sensitivity">
+                        <div class="setting-label-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            <span>Cursor Speed</span>
+                        </div>
+                        <span class="setting-val" id="val-cursor-sens">2.5</span>
+                    </label>
+                    <input type="range" id="cursor-sensitivity" min="0.5" max="10" step="0.5" value="2.5">
+                </div>
+
+                <div class="setting-group">
+                    <label for="scroll-sensitivity">
+                        <div class="setting-label-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+                            <span>Scroll Speed</span>
+                        </div>
+                        <span class="setting-val" id="val-scroll-sens">5.0</span>
+                    </label>
+                    <input type="range" id="scroll-sensitivity" min="1" max="20" step="1" value="5">
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <div class="setting-label-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                            <span>Precision Mode</span>
+                        </div>
+                    </label>
+                    <button id="btn-precision" class="ctrl-btn toggle-btn">OFF</button>
+                </div>
+
+                <div class="setting-group">
+                    <label>
+                        <div class="setting-label-row">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>Kill Switch</span>
+                        </div>
+                    </label>
+                    <button id="btn-kill" class="ctrl-btn danger-outline">LOCK SYSTEM</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav id="bottom-nav">
+        <button class="nav-item active" data-layer="layer-mouse">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="6"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+            <span>Mouse</span>
+        </button>
+        <button class="nav-item" data-layer="layer-console">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            <span>Console</span>
+        </button>
+        <button class="nav-item" data-layer="layer-settings">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
